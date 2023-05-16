@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <title>Jass Inator</title>
+
+  <link rel="stylesheet" href="./main.css">
+  <script type="text/javascript" src="./js/polyfills.js"></script>
+  <script type="text/javascript" src="./js/tone.min.js"></script>
+  <script type="text/javascript" src="./js/microevent.js"></script>
+  <script type="text/javascript" src="./js/widgets.min.js"></script>
+
+  <script type="text/javascript">
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js').then(function (registration) {
+        }, function (err) {
+        });
+      });
+    }
+  </script>
+</head>
+
+<body class="lang-- bg--base color--inverted has-nav ltr nav-is-hidden nav-is-initialized" dir="ltr" onload="">
+
+  <script type="text/javascript">
+    function onLoad() {
+      ANIMATION_FRAMER = new AnimationFramer();
+      ANIMATION_FRAMER.init();
+
+      SUPERVISOR = new AudioSupervisor();
+      SUPERVISOR.init();
+
+      EXPORTER = new LiveSetExporter();
+      EXPORTER.init();
+
+      KEY_SUPERVISOR = new KeySupervisor();
+      KEY_SUPERVISOR.init();
+
+      METRONOME = new Metronome();
+      METRONOME.init();
+
+      LOCALE = '';
+      LOCALE_PATH = '';
+    }
+    onLoad();
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+      var widgets = document.getElementsByClassName("widget");
+      var widgetIds = {};
+      for (var i = 0; i < widgets.length; i++) {
+        var id = widgets[i].id;
+        if (widgetIds[id]) {
+          throw "Duplicate widget id: " + id;
+        }
+        widgetIds[id] = true;
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+      var imageTags = Array.from(document.getElementsByTagName("img"));
+      for (var i = 0; i < imageTags.length; i++) {
+        var tag = imageTags[i];
+        if (tag.getAttribute("ix-path")) {
+          var filename = tag.getAttribute("ix-path");
+          tag.src = "/images/ix/small/" + filename;
+          tag.sizes = "";
+        }
+      }
+    });
+  </script>
+  <div class="container mx-auto">
+    <header class="main-header">
+      <div class="ribbon ribbon--rigid medium">
+        <div class="ribbon__element main-header__title">
+          Get started
+        </div>
+
+    </header>
+  </div>
+
+  <div class="container container--max-width mx-auto">
+    <div class="body-text text-container limit-line-length-inside">
+
+      <div style="position: relative;">
+        <div>
+          <div class="widget-session__wrapper">
+            <div class="widget-session__track theme-a">Drums<button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button><button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button><button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button><button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button></div>
+            <div class="widget-session__track theme-d">Bass<button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button><button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button><button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button><button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button></div>
+            <div class="widget-session__track theme-c">Chords<button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button><button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button><button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button><button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button></div>
+            <div class="widget-session__track theme-e">Melodies<button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button><button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button><button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button><button
+                class="btn widget-session__pad  widget-session__pad--stopped "></button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script src="./js/SimpleSession.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var widgets = document.getElementsByClassName("session");
+      Array.from(widgets).forEach(function (e) {
+        window[e.id] = new SimpleSession();
+        window[e.id].init({
+          widgetId: e.id,
+          preset: JSON.parse(e.getAttribute('data-preset')),
+          tips: JSON.parse(e.getAttribute('data-tips')),
+          tip: e.getAttribute('data-tip'),
+          lang: JSON.parse(e.getAttribute('data-lang'))
+        })
+      })
+
+    });
+  </script>
+
+
+</body>
+
+</html>
