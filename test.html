@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Jazz Music Grid</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    <style>
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+        }
+
+        .button {
+            width: 100%;
+            height: 100px;
+            background-color: lightgray;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button.playing {
+            background-color: green;
+        }
+
+        .button:hover {
+            background-color: rgba(169, 169, 169, 0.8);
+            /* Semi-transparent hover color */
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Jazz Music Grid</h1>
+    <div class="grid">
+        <div class="button" onclick="initAudioContext(); toggleSound(0,0)"></div>
+        <div class="button" onclick="initAudioContext(); toggleSound(0,1)"></div>
+        <div class="button" onclick="initAudioContext(); toggleSound(0,2)"></div>
+        <div class="button" onclick="initAudioContext(); toggleSound(0,3)"></div>
+        <div class="button" onclick="initAudioContext(); toggleSound(1,0)"></div>
+        <div class="button" onclick="initAudioContext(); toggleSound(1,1)"></div>
+        <div class="button" onclick="initAudioContext(); toggleSound(1,2)"></div>
+        <div class="button" onclick="initAudioContext(); toggleSound(1,3)"></div>
+        <div class="button" onclick="initAudioContext(); toggleSound(2,0)"></div>
+        <div class="button" onclick="initAudioContext(); toggleSound(2,1)"></div>
+        <div class="button" onclick="initAudioContext(); toggleSound(2,2)"></div>
+        <div class="button" onclick="initAudioContext(); toggleSound(2,3)"></div>
+        <div class="button" onclick="initAudioContext(); toggleSound(3,0)"></div>
+        <div class="button" onclick="initAudioContext(); toggleSound(3,1)"></div>
+        <div class="button" onclick="initAudioContext(); toggleSound(3,2)"></div>
+        <div class="button" onclick="initAudioContext(); toggleSound(3,3)"></div>
+    </div>
+
+    <script>
+        // Create an array of sound URLs
+        const sounds = [
+            'sound1.wav',
+            'sound2.wav',
+            'sound3.wav',
+            'sound4.wav',
+            'sound5.wav'
+        ];
+
+        // Create an array to keep track of the currently playing sound in each column
+        const currentSounds = [-1, -1, -1, -1];
+
+        // Create Howl instances for each sound
+        const howls = sounds.map(sound => new Howl({
+            src: [sound],
+            autoplay: false,
+            html5: true,
+            loop: true, // Enable looping
+            rate: 162 / 120, // Adjust rate based on BPM
+            onplay: function () {
+                const soundIndex = sounds.indexOf(sound);
+                const button = document.querySelectorAll('.button')[soundIndex];
+                button.classList.add('playing');
+            },
+            onstop: function () {
+                const soundIndex = sounds.indexOf(sound);
+                const button = document.querySelectorAll('.button')[soundIndex];
+                button.classList.remove('playing');
+            }
+        }));
+
+        // Initialize the audio context
+        function initAudioContext() {
+            if (typeof Howler.ctx === 'undefined') {
+                Howler.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function toggleSound(row, col) {
+            const soundIndex = row * 4 + col;
+            const button = document.querySelectorAll('.button')[soundIndex];
+            const currentSoundIndex = currentSounds[col];
+
+            if (currentSoundIndex !== -1) {
+                // Stop the currently playing sound in the same column
+                howls[currentSoundIndex].stop();
+                if (currentSoundIndex === soundIndex) {
+                    // Same button clicked again, return early
+                    return;
+                }
+            }
+
+            if (currentSoundIndex !== soundIndex) {
+                // Play the selected sound
+                howls[soundIndex].play();
+
+                // Update the currently playing sound in the column
+                currentSounds[col] = soundIndex;
+            } else {
+                // Reset the currently playing sound in the column
+                currentSounds[col] = -1;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
