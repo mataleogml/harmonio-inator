@@ -1,0 +1,31 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+  }
+
+  #grid {
+    display: grid;
+    grid-template-columns: repeat(1, 4fr);
+    max-width: 400px; /* Adjust the maximum width as needed */
+    width: 100%;
+  }
+
+  .row {
+    display: flex;
+  }
+
+  .cell {
+    flex: 1;
+    height: 100px;
+    background-color: gray;
+    cursor: pointer;
+    margin: 10px;
+  }
+
+  .cell.active {
+    background-color: orange;
+  }
