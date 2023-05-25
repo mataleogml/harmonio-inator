@@ -17,52 +17,58 @@ const melodyArray = [
     ['F5', 'A5', 'C6', 'E6'],   // Dominant 7th chord
 ];
 
-const synth = new Tone.Synth().toDestination();
-
-const cells = document.querySelectorAll('.cell');
-let melodyQueue = []; // Queue to store the clicked cells
-
-// Add event listeners to each cell
-cells.forEach((cell, index) => {
+const sampler = new Tone.Sampler({
+    urls: {
+      "C4": "C4.mp3",
+      "D#4": "Ds4.mp3",
+      "F#4": "Fs4.mp3",
+      "A4": "A4.mp3",
+    },
+    release: 1,
+    baseUrl: "https://tonejs.github.io/audio/salamander/",
+  }).toDestination();
+  
+  const melodyGapDuration = 0.25; // Adjust the gap duration between melodies
+  const noteGapDuration = 0.25; // Adjust the gap duration between notes within a melody
+  
+  const cells = document.querySelectorAll('.cell');
+  let melodyQueue = [];
+  
+  cells.forEach((cell, index) => {
     cell.addEventListener('click', () => {
-        toggleCellActiveState(cell);
-        addToMelodyQueue(index);
+      toggleCellActiveState(cell);
+      addToMelodyQueue(index);
     });
-});
-
-// Toggle the active state of a cell
-function toggleCellActiveState(cell) {
+  });
+  
+  function toggleCellActiveState(cell) {
     cell.classList.toggle('active');
-}
-
-// Add cell index to the melody queue
-function addToMelodyQueue(index) {
+  }
+  
+  function addToMelodyQueue(index) {
     melodyQueue.push(index);
     if (melodyQueue.length === 1) {
-        playNextMelody();
+      playNextMelody();
     }
-}
-
-// Play the next melody in the queue
-function playNextMelody() {
+  }
+  
+  function playNextMelody() {
     const index = melodyQueue[0];
     const cell = cells[index];
     const melody = melodyArray[index];
-
-    // Play the notes in the melody
+  
     melody.forEach((note, i) => {
-        if (note) {
-            const time = Tone.now() + i * 0.25;
-            synth.triggerAttackRelease(note, '8n', time);
-        }
+      if (note) {
+        const time = Tone.now() + (i * noteGapDuration);
+        sampler.triggerAttackRelease(note, '8n', time);
+      }
     });
-
-    // Clear the active state of the cell after the melody duration
+  
     setTimeout(() => {
-        cell.classList.remove('active');
-        melodyQueue.shift(); // Remove the finished melody from the queue
-        if (melodyQueue.length > 0) {
-            playNextMelody(); // Play the next melody in the queue
-        }
-    }, melody.length * 0.25 * 1000); // Delay the clearing of active state based on the melody duration
-}
+      cell.classList.remove('active');
+      melodyQueue.shift();
+      if (melodyQueue.length > 0) {
+        setTimeout(playNextMelody, melodyGapDuration * 1000); // Introduce gap between melodies
+      }
+    }, melody.length * noteGapDuration * 1000);
+  }
