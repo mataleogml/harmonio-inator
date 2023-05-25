@@ -28,8 +28,8 @@ const sampler = new Tone.Sampler({
     baseUrl: "https://tonejs.github.io/audio/salamander/",
   }).toDestination();
   
-  const melodyGapDuration = 0.25; // Adjust the gap duration between melodies
-  const noteGapDuration = 0.25; // Adjust the gap duration between notes within a melody
+  const melodyGapDuration = 0.20; // Adjust the gap duration between melodies
+  const noteGapDuration = 0.20; // Adjust the gap duration between notes within a melody
   
   const cells = document.querySelectorAll('.cell');
   let melodyQueue = [];
