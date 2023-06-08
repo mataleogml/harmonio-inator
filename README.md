@@ -2,6 +2,8 @@
 
 This repository contains the code for Harmonio-Inator, a music grid powered by Tone.js. It allows users to create melodies by clicking on cells in the grid, triggering musical notes to be played.
 
+This project is an assignment under the course UXDG-320 provided by the [Savannah College of Art and Design](https://www.scad.edu/), which allow students to propose solutions to real-world problems with novel, interactive technology solutions. Students can explore variety of coding languages and their intended user experience design applications, and effectively collaborate to design solutions, evaluate design feasibility, and test user experiences.
+
 ## Table of Contents
 
 - [Introduction](#introduction)
